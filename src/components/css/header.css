@@ -1,0 +1,17 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  color: white;
+  background-color: var(--clr-Neutral-900);
+}
+
+.header img {
+  width: 24px;
+}
+
+.header-right {
+  display: flex;
+  gap: 8px;
+}

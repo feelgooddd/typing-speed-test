@@ -1,0 +1,57 @@
+:root{
+
+
+/* Neutral */
+
+--clr-Neutral-900:hsl(0, 0%, 7%);
+--clr-Neutral-800: hsl(0, 0%, 15%);
+--clr-Neutral-500: hsl(240, 3%, 46%);
+--clr-Neutral-400: hsl(240, 1%, 59%);
+--clr-Neutral-0: hsl(0, 0%, 100%);
+
+/* ### Blue */
+
+--clr-Blue-600: hsl(214, 100%, 55%);
+--clr-Blue-400: hsl(210, 100%, 65%);
+
+/* ### Red */
+
+--clr-Red-500: hsl(354, 63%, 57%);
+
+/* ### Green */
+
+--clr-Green-500: hsl(140, 63%, 57%);
+
+/* ### Yellow */
+
+--clr-Yellow-400: hsl(49, 85%, 70%);
+
+}
+
+*,*::before,*::after{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+img{
+  width: 100%;
+  display: block;
+}
+
+button{
+  font-family: inherit;
+  color: inherit;
+}
+
+.txt-grey{
+  color: var(--clr-Neutral-500)
+}
+.hidden{
+  display: none;
+}
+
+body{
+  color: var(--clr-Neutral-0);
+  background-color: var(--clr-Neutral-900);
+  font-family: "Sora", sans-serif;
+}
