@@ -8,6 +8,26 @@
   font-size: 1.125rem;
 }
 
-.typing-section{
-    margin-top: 15px;
+.typing-section {
+  margin: 20px 15px;
+  user-select: none; /* Prevents highlighting text */
+}
+
+.correct {
+  background-color: green;
+}
+
+.incorrect {
+  background-color: red;
+  text-decoration: underline;
+}
+
+.active {
+  text-decoration: underline;
+}
+
+.typing-text {
+  line-height: 2rem;
+  font-size: 1.25rem;
+  color: var(--clr-Neutral-400);
 }
