@@ -9,7 +9,7 @@ const App = () => {
 
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState(100);
-  const [timeLeft, setTimeLeft] = useState(60);
+  const [timeLeft, setTimeLeft] = useState(5);
   useEffect(() => {
     if (!timerStarted) return; // start only on first keypress
 
@@ -43,6 +43,7 @@ const App = () => {
         timeLeft={timeLeft}
       />
       <TypingTest
+      timeLeft={timeLeft}
         testStarted={testStarted}
         setTimerStarted={setTimerStarted}
         timerStarted={timerStarted}
