@@ -76,7 +76,6 @@ const Timing = ({
     )}
   </div>
 
-  {/* Time Button + Menu */}
   <div className="timing-menu__wrapper" style={{ marginLeft: "10px" }}>
     <button
       className="time-btn"

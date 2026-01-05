@@ -20,6 +20,9 @@ const TypingTest = ({
   const [text, setText] = useState("Test");
   const [data, setData] = useState({});
 
+  // State boolean to monitor end of text
+  // const [textAppendFlag, setTextAppendFlag] = useState(false);
+
   const inputRef = useRef(null);
 
   const isTypingEnabled = testStarted && !(timeLeft === 0);
@@ -29,7 +32,7 @@ const TypingTest = ({
     if (inputRef.current) inputRef.current.focus();
   }, [testStarted]);
 
-  // Keep input focused even if user clicks elsewhere
+  // Keep input focused even if they click somewhere else
   useEffect(() => {
     const keepFocus = () => {
       if (inputRef.current) inputRef.current.focus();
@@ -66,36 +69,53 @@ useEffect(() => {
 }, [data, difficulty]);
 
 
-  function handleType(value) {
-    if (value.length > text.length) return;
-    if (timeLeft === 0) return; // stop typing when time is up
+function handleType(value) {
+  if (value.length > text.length) return;
+  if (timeLeft === 0) return; // stop typing when time is up
 
-    if (!startTime && value.length === 1) {
-      setStartTime(Date.now());
-    }
-    if (!timerStarted && value.length === 1) {
-      setTimerStarted(true); // start timer now
-    }
-
-    setInput(value);
-
-    // WPM calculation
-    if (startTime || value.length === 1) {
-      const elapsedMinutes = (Date.now() - (startTime || Date.now())) / 60000;
-      const charsTyped = value.length;
-      const currentWpm = Math.round(charsTyped / 5 / elapsedMinutes);
-      setWpm(currentWpm);
-    }
-
-    // Accuracy (backspace-aware)
-    const correctChars = value
-      .split("")
-      .filter((char, i) => char === text[i]).length;
-    const totalChars = value.length;
-    setAccuracy(
-      totalChars === 0 ? 100 : Math.round((correctChars / totalChars) * 100)
-    );
+  // Start time logic
+  if (!startTime && value.length === 1) {
+    setStartTime(Date.now());
   }
+  if (!timerStarted && value.length === 1) {
+    setTimerStarted(true); // start timer now
+  }
+
+  setInput(value);
+
+  // ------------------------
+  // WPM calculation
+  // ------------------------
+  if (startTime || value.length === 1) {
+    const elapsedMinutes = (Date.now() - (startTime || Date.now())) / 60000;
+    const charsTyped = value.length;
+    const currentWpm = Math.round(charsTyped / 5 / elapsedMinutes);
+    setWpm(currentWpm);
+  }
+
+  // ------------------------
+  // Accuracy calculation
+  // ------------------------
+  const correctChars = value
+    .split("")
+    .filter((char, i) => char === text[i]).length;
+  const totalChars = value.length;
+  setAccuracy(
+    totalChars === 0 ? 100 : Math.round((correctChars / totalChars) * 100)
+  );
+
+  // ------------------------
+  // Append new text if close to end
+  const remainingChars = text.length - value.length; 
+  const list = data[difficulty]; 
+
+  if (Array.isArray(list) && list.length > 0 && remainingChars <= 15) {
+    const randomIndex = Math.floor(Math.random() * list.length);
+    const nextText = list[randomIndex].text;
+    setText(prev => prev + " " + nextText); // add a space betwen the old text n the new txt
+  }
+}
+
 
   function handleClick() {
     setTestStarted(true);
