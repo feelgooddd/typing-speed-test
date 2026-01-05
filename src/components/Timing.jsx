@@ -1,6 +1,6 @@
 import "./css/timing.css";
 import { useState } from "react";
-import TimingMenu from "./TimingMenu";
+import Menu from "./Menu";
 
 const Timing = ({
   wpm,
@@ -13,7 +13,19 @@ const Timing = ({
   setDifficulty,
   testStarted,
 }) => {
-  const [menuType, setMenuType] = useState(null); // "time" | "difficulty"
+  const timeOptions = [
+    { label: "0:30", value: 30 },
+    { label: "1:00", value: 60 },
+    { label: "1:30", value: 90 },
+  ];
+
+  const difficultyOptions = [
+    { label: "Easy", value: "easy" },
+    { label: "Medium", value: "medium" },
+    { label: "Hard", value: "hard" },
+  ];
+  const [isTimeOpen, setIsTimeOpen] = useState(false);
+  const [isDifficultyOpen, setIsDifficultyOpen] = useState(false);
 
   function handleTimeSelect(seconds) {
     if (testStarted) return;
@@ -45,33 +57,45 @@ const Timing = ({
         </div>
       </div>
 
-      <div className="timing-section__buttons">
-        <button
-          className="difficulty-btn"
-          onClick={() => setMenuType("difficulty")}
-        >
-          {difficulty[0].toUpperCase() + difficulty.slice(1)}
-        </button>
+<div className="timing-section__buttons">
+  {/* Difficulty Button + Menu */}
+  <div className="timing-menu__wrapper">
+    <button
+      className="difficulty-btn"
+      disabled={testStarted}
+      onClick={() => setIsDifficultyOpen((o) => !o)}
+    >
+      {difficulty[0].toUpperCase() + difficulty.slice(1)}
+    </button>
+    {isDifficultyOpen && (
+      <Menu
+        options={difficultyOptions}
+        onSelect={handleDifficultySelect}
+        onRequestClose={() => setIsDifficultyOpen(false)}
+      />
+    )}
+  </div>
 
-        <button
-          className="time-btn"
-          onClick={() => setMenuType("time")}
-        >
-          Timed {timeSetting}
-        </button>
-      </div>
+  {/* Time Button + Menu */}
+  <div className="timing-menu__wrapper" style={{ marginLeft: "10px" }}>
+    <button
+      className="time-btn"
+      disabled={testStarted}
+      onClick={() => setIsTimeOpen((o) => !o)}
+    >
+      Timed {timeSetting}
+    </button>
+    {isTimeOpen && (
+      <Menu
+        options={timeOptions}
+        onSelect={handleTimeSelect}
+        onRequestClose={() => setIsTimeOpen(false)}
+      />
+    )}
+  </div>
+</div>
 
-      {menuType && (
-        <TimingMenu
-          type={menuType}
-          onSelect={
-            menuType === "time"
-              ? handleTimeSelect
-              : handleDifficultySelect
-          }
-          onClose={() => setMenuType(null)}
-        />
-      )}
+
     </section>
   );
 };

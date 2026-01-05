@@ -37,7 +37,8 @@
 
 .timing-section__buttons {
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 20px;
   padding: 8px;
   padding-bottom: 12px;
   border-bottom: 1px solid var(--clr-Neutral-500);
@@ -50,6 +51,7 @@ color: inherit;
 border: 1px solid var(--clr-Neutral-500);
 border-radius: 8px;
 padding: 5px 10px;
+width: 150px;
 }
 .difficulty-btn {
     flex: 1;

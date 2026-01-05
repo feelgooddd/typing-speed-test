@@ -1,0 +1,46 @@
+/* Each button + menu wrapper */
+.timing-menu__wrapper {
+  position: relative;       /* anchor menu to this button */
+  display: inline-block;    /* place buttons side by side */
+  margin-right: 10px;       /* spacing between buttons */
+}
+
+/* The dropdown menu itself */
+.timing-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 5px;
+
+  position: absolute;
+  top: 100%;           /* drop below the button */
+  left: 0;             /* align with button left edge */
+
+  min-width: 150px;    /* enough for labels */
+  background-color: var(--clr-Neutral-800);
+  border: 1px solid var(--clr-Neutral-500);
+  border-radius: 4px;
+  z-index: 100;        /* always on top */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* optional for nice visual */
+}
+
+/* Menu buttons */
+.timing-menu button {
+  color: var(--clr-Neutral-50);
+  background-color: transparent;
+  border: none;
+  padding: 6px 8px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Add hover feedback */
+.timing-menu button:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+/* Optional: add borders between items */
+.timing-menu button + button {
+  border-top: 1px solid var(--clr-Neutral-500);
+}

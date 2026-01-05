@@ -8,15 +8,16 @@
   position: absolute;
   width: 100%;
 
+  z-index: 10;
+  
   background: rgba(255, 255, 255, 0);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(8px); /* Safari */
 
   pointer-events: all;
-
 }
 
-.typing-section__overlay p{
-    font-weight: 700;
-    letter-spacing: 0.75px;
+.typing-section__overlay p {
+  font-weight: 700;
+  letter-spacing: 0.75px;
 }
