@@ -1,0 +1,23 @@
+.timing-menu {
+  display: flex;
+  gap: 2px;
+  padding: 5px;
+  flex-direction: column;
+  position: absolute;
+  flex: 1;
+  min-width: 200px;
+  transform: translateX(-50%);
+  left: 50%;
+  background-color: var(--clr-Neutral-800);
+}
+.timing-menu button {
+  color: var(--clr-Neutral-50);
+  background-color: transparent;
+  border: none;
+  text-align: left;
+}
+
+.timing-menu > button:not(:last-child) {
+  border-bottom: 1px solid var(--clr-Neutral-500);
+  padding-bottom: 4px;
+}

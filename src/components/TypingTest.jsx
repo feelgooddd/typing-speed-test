@@ -13,13 +13,15 @@ const TypingTest = ({
   setTimerStarted,
   timerStarted,
   timeLeft,
+  difficulty
 }) => {
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState(null);
+  const [text, setText] = useState("Test");
+  const [data, setData] = useState({});
 
   const inputRef = useRef(null);
 
-  const text = "Lorem ipsum dolor sit, amet consectetur adipisicing elit.";
   const isTypingEnabled = testStarted && !(timeLeft === 0);
 
   // Focus input on mount and whenever test starts
@@ -41,6 +43,28 @@ const TypingTest = ({
       window.removeEventListener("keydown", keepFocus);
     };
   }, []);
+  useEffect(() => {
+    const getTextData = async () => {
+      try {
+        const response = await fetch("/data.json");
+        const data = await response.json();
+        setData(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getTextData();
+  }, []);
+
+useEffect(() => {
+  const list = data[difficulty];
+
+  if (Array.isArray(list) && list.length > 0) {
+    const randomIndex = Math.floor(Math.random() * list.length);
+    setText(list[randomIndex].text);
+  }
+}, [data, difficulty]);
+
 
   function handleType(value) {
     if (value.length > text.length) return;
@@ -87,21 +111,22 @@ const TypingTest = ({
       }}
     >
       {!testStarted && <TypingTestOverlay startTest={handleClick} />}
-
       <p className="typing-text">
-        {text.split("").map((char, index) => {
-          let className = "";
-          if (index < input.length) {
-            className = char === input[index] ? "correct" : "incorrect";
-          }
-          if (index === input.length) className += " active";
+        {(typeof text === "string" ? text : "Loading...")
+          .split("")
+          .map((char, index) => {
+            let className = "";
+            if (index < input.length) {
+              className = char === input[index] ? "correct" : "incorrect";
+            }
+            if (index === input.length) className += " active";
 
-          return (
-            <span key={index} className={className}>
-              {char}
-            </span>
-          );
-        })}
+            return (
+              <span key={index} className={className}>
+                {char}
+              </span>
+            );
+          })}
       </p>
 
       {/* Hidden input always focused */}
