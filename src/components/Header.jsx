@@ -2,8 +2,7 @@ import LogoSmall from "../assets/images/logo-small.svg";
 import PersonalBestIcon from "../assets/images/icon-personal-best.svg";
 import { useState } from "react";
 import "./css/header.css";
-const Header = () => {
-  const [PB, setPB] = useState(0);
+const Header = ({PB}) => {
   return (
     <header className="header">
       <div className="header-left">
@@ -11,7 +10,7 @@ const Header = () => {
       </div>
       <div className="header-right">
         <img src={PersonalBestIcon} alt="" />
-        <h2><span className="txt-grey">Best:</span> {PB}</h2>
+        <h2><span className="txt-grey">Best:</span> {PB} WPM</h2>
       </div>
     </header>
   );

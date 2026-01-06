@@ -4,11 +4,10 @@ import TypingInput from "./TypingInput";
 import { useState, useRef, useEffect } from "react";
 
 const TypingTest = ({
-  wpm,
+  setPB,
   setWpm,
   testStarted,
   setTestStarted,
-  accuracy,
   setAccuracy,
   setTimerStarted,
   timerStarted,
@@ -71,7 +70,9 @@ const TypingTest = ({
 
   function handleType(value) {
     if (value.length > text.length) return;
-    if (timeLeft === 0) return; // stop typing when time is up
+    if (timeLeft === 0) {
+      return;
+    }; // stop typing when time is up
 
     // Start time logic
     if (!startTime && value.length === 1) {

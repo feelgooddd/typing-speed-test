@@ -7,12 +7,14 @@ const App = () => {
   const [testStarted, setTestStarted] = useState(false);
   const [timerStarted, setTimerStarted] = useState(false);
 
-  const [timeSetting, setTimeSetting] = useState(60)
+  const [timeSetting, setTimeSetting] = useState(60);
   const [difficulty, setDifficulty] = useState("medium");
 
   const [wpm, setWpm] = useState(0);
   const [accuracy, setAccuracy] = useState(100);
   const [timeLeft, setTimeLeft] = useState(60);
+  const [PB, setPB] = useState(localStorage.getItem("PB") || 0);
+
   useEffect(() => {
     if (!timerStarted) return; // start only on first keypress
 
@@ -34,10 +36,19 @@ const App = () => {
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   }
+  useEffect(() => {
+    if (timeLeft === 0 && wpm > PB) {
+      //Update visually without needing a reload
+      setPB(wpm);
+      //Store it in local storage
+      localStorage.setItem("PB", wpm);
+    }
+
+  }, [timeLeft]);
 
   return (
     <div>
-      <Header />
+      <Header PB={PB} />
       <Timing
         time={formatTime(timeLeft)}
         testStarted={testStarted}
@@ -59,6 +70,7 @@ const App = () => {
         setTestStarted={setTestStarted}
         setWpm={setWpm}
         setAccuracy={setAccuracy}
+        setPB={setPB}
       />
     </div>
   );

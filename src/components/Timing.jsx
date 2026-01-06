@@ -14,6 +14,7 @@ const Timing = ({
   testStarted,
 }) => {
   const timeOptions = [
+    { label: "0:01", value: 1 },
     { label: "0:30", value: 30 },
     { label: "1:00", value: 60 },
     { label: "1:30", value: 90 },
