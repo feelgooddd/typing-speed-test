@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import ResultsFirst from "./components/ResultsFirst";
+import Results from "./components/Results";
 import Timing from "./components/Timing";
 import TypingTest from "./components/TypingTest";
 import { useState, useEffect } from "react";
@@ -20,7 +20,7 @@ const App = () => {
   const [correctChars, setCorrectChars] = useState(0);
   const [totalChars, setTotalChars] = useState(0);
   const [charsMissed, setCharsMissed] = useState(0);
-
+  const [resultVariant, setResultVariant] = useState("");
   useEffect(() => {
     if (!timerStarted) return; // start only on first keypress
 
@@ -43,7 +43,18 @@ const App = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   }
   useEffect(() => {
-    if (timeLeft === 0 /*&& PB === 0*/) {
+    if (timeLeft === 0 && PB === 0) {
+      setResultVariant("firstpb")
+      setCharsMissed(totalChars - correctChars);
+      setTestFinished(!testFinished);
+    }
+    else if (timeLeft === 0 && wpm > PB) {
+      setResultVariant("newpb")
+      setCharsMissed(totalChars - correctChars);
+      setTestFinished(!testFinished);
+    }
+    else if (timeLeft === 0 && wpm < PB) {
+      setResultVariant("nopb");
       setCharsMissed(totalChars - correctChars);
       setTestFinished(!testFinished);
     }
@@ -88,11 +99,12 @@ const App = () => {
           />
         </>
       ) : (
-        <ResultsFirst
+        <Results
           wpm={wpm}
           accuracy={accuracy}
           charsHit={correctChars}
           charsMissed={charsMissed}
+          resultVariant={resultVariant}
         />
       )}
     </div>
