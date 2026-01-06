@@ -1,4 +1,5 @@
 import Header from "./components/Header";
+import ResultsFirst from "./components/ResultsFirst";
 import Timing from "./components/Timing";
 import TypingTest from "./components/TypingTest";
 import { useState, useEffect } from "react";
@@ -6,6 +7,7 @@ import { useState, useEffect } from "react";
 const App = () => {
   const [testStarted, setTestStarted] = useState(false);
   const [timerStarted, setTimerStarted] = useState(false);
+  const [testFinished, setTestFinished] = useState(false);
 
   const [timeSetting, setTimeSetting] = useState(60);
   const [difficulty, setDifficulty] = useState("medium");
@@ -14,6 +16,10 @@ const App = () => {
   const [accuracy, setAccuracy] = useState(100);
   const [timeLeft, setTimeLeft] = useState(60);
   const [PB, setPB] = useState(localStorage.getItem("PB") || 0);
+
+  const [correctChars, setCorrectChars] = useState(0);
+  const [totalChars, setTotalChars] = useState(0);
+  const [charsMissed, setCharsMissed] = useState(0);
 
   useEffect(() => {
     if (!timerStarted) return; // start only on first keypress
@@ -37,41 +43,58 @@ const App = () => {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   }
   useEffect(() => {
+    if (timeLeft === 0 /*&& PB === 0*/) {
+      setCharsMissed(totalChars - correctChars);
+      setTestFinished(!testFinished);
+    }
     if (timeLeft === 0 && wpm > PB) {
       //Update visually without needing a reload
       setPB(wpm);
       //Store it in local storage
       localStorage.setItem("PB", wpm);
     }
-
   }, [timeLeft]);
 
   return (
     <div>
       <Header PB={PB} />
-      <Timing
-        time={formatTime(timeLeft)}
-        testStarted={testStarted}
-        wpm={wpm}
-        accuracy={accuracy}
-        timeLeft={timeLeft}
-        timeSetting={formatTime(timeSetting)}
-        setTimeLeft={setTimeLeft}
-        setTimeSetting={setTimeSetting}
-        setDifficulty={setDifficulty}
-        difficulty={difficulty}
-      />
-      <TypingTest
-        difficulty={difficulty}
-        timeLeft={timeLeft}
-        testStarted={testStarted}
-        setTimerStarted={setTimerStarted}
-        timerStarted={timerStarted}
-        setTestStarted={setTestStarted}
-        setWpm={setWpm}
-        setAccuracy={setAccuracy}
-        setPB={setPB}
-      />
+
+      {!testFinished ? (
+        <>
+          <Timing
+            time={formatTime(timeLeft)}
+            testStarted={testStarted}
+            wpm={wpm}
+            accuracy={accuracy}
+            timeLeft={timeLeft}
+            timeSetting={formatTime(timeSetting)}
+            setTimeLeft={setTimeLeft}
+            setTimeSetting={setTimeSetting}
+            setDifficulty={setDifficulty}
+            difficulty={difficulty}
+          />
+          <TypingTest
+            difficulty={difficulty}
+            timeLeft={timeLeft}
+            testStarted={testStarted}
+            setTimerStarted={setTimerStarted}
+            timerStarted={timerStarted}
+            setTestStarted={setTestStarted}
+            setWpm={setWpm}
+            setAccuracy={setAccuracy}
+            setPB={setPB}
+            setCorrectChars={setCorrectChars}
+            setTotalChars={setTotalChars}
+          />
+        </>
+      ) : (
+        <ResultsFirst
+          wpm={wpm}
+          accuracy={accuracy}
+          charsHit={correctChars}
+          charsMissed={charsMissed}
+        />
+      )}
     </div>
   );
 };

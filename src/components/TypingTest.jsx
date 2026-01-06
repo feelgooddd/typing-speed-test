@@ -13,13 +13,14 @@ const TypingTest = ({
   timerStarted,
   timeLeft,
   difficulty,
+  setTotalChars,
+  setCorrectChars,
 }) => {
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [text, setText] = useState("Test");
   const [data, setData] = useState({});
   const [charsTyped, setCharsTyped] = useState(0);
-
   // State boolean to monitor end of text
   // const [textAppendFlag, setTextAppendFlag] = useState(false);
 
@@ -72,7 +73,7 @@ const TypingTest = ({
     if (value.length > text.length) return;
     if (timeLeft === 0) {
       return;
-    }; // stop typing when time is up
+    } // stop typing when time is up
 
     // Start time logic
     if (!startTime && value.length === 1) {
@@ -103,6 +104,9 @@ const TypingTest = ({
     setAccuracy(
       totalChars === 0 ? 100 : Math.round((correctChars / totalChars) * 100)
     );
+
+    setCorrectChars(correctChars);
+    setTotalChars(totalChars);
 
     // ------------------------
     // Append new text if close to end
