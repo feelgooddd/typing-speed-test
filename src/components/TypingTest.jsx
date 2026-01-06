@@ -13,12 +13,13 @@ const TypingTest = ({
   setTimerStarted,
   timerStarted,
   timeLeft,
-  difficulty
+  difficulty,
 }) => {
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [text, setText] = useState("Test");
   const [data, setData] = useState({});
+  const [charsTyped, setCharsTyped] = useState(0);
 
   // State boolean to monitor end of text
   // const [textAppendFlag, setTextAppendFlag] = useState(false);
@@ -59,63 +60,60 @@ const TypingTest = ({
     getTextData();
   }, []);
 
-useEffect(() => {
-  const list = data[difficulty];
+  useEffect(() => {
+    const list = data[difficulty];
 
-  if (Array.isArray(list) && list.length > 0) {
-    const randomIndex = Math.floor(Math.random() * list.length);
-    setText(list[randomIndex].text);
-  }
-}, [data, difficulty]);
+    if (Array.isArray(list) && list.length > 0) {
+      const randomIndex = Math.floor(Math.random() * list.length);
+      setText(list[randomIndex].text);
+    }
+  }, [data, difficulty]);
 
+  function handleType(value) {
+    if (value.length > text.length) return;
+    if (timeLeft === 0) return; // stop typing when time is up
 
-function handleType(value) {
-  if (value.length > text.length) return;
-  if (timeLeft === 0) return; // stop typing when time is up
+    // Start time logic
+    if (!startTime && value.length === 1) {
+      setStartTime(Date.now());
+    }
+    if (!timerStarted && value.length === 1) {
+      setTimerStarted(true); // start timer now
+    }
+    if (value.length > input.length) {
+      setCharsTyped((prev) => prev + (value.length - input.length));
+    }
 
-  // Start time logic
-  if (!startTime && value.length === 1) {
-    setStartTime(Date.now());
-  }
-  if (!timerStarted && value.length === 1) {
-    setTimerStarted(true); // start timer now
-  }
+    setInput(value);
 
-  setInput(value);
-
-  // ------------------------
-  // WPM calculation
-  // ------------------------
-  if (startTime || value.length === 1) {
+    //wpm calc
     const elapsedMinutes = (Date.now() - (startTime || Date.now())) / 60000;
-    const charsTyped = value.length;
-    const currentWpm = Math.round(charsTyped / 5 / elapsedMinutes);
-    setWpm(currentWpm);
+
+    if (elapsedMinutes > 0) {
+      const currentWpm = Math.round(charsTyped / 5 / elapsedMinutes);
+      setWpm(currentWpm);
+    }
+
+    // Accuracy calc
+    const correctChars = value
+      .split("")
+      .filter((char, i) => char === text[i]).length;
+    const totalChars = value.length;
+    setAccuracy(
+      totalChars === 0 ? 100 : Math.round((correctChars / totalChars) * 100)
+    );
+
+    // ------------------------
+    // Append new text if close to end
+    const remainingChars = text.length - value.length;
+    const list = data[difficulty];
+
+    if (Array.isArray(list) && list.length > 0 && remainingChars <= 15) {
+      const randomIndex = Math.floor(Math.random() * list.length);
+      const nextText = list[randomIndex].text;
+      setText((prev) => prev + " " + nextText); // add a space betwen the old text n the new txt
+    }
   }
-
-  // ------------------------
-  // Accuracy calculation
-  // ------------------------
-  const correctChars = value
-    .split("")
-    .filter((char, i) => char === text[i]).length;
-  const totalChars = value.length;
-  setAccuracy(
-    totalChars === 0 ? 100 : Math.round((correctChars / totalChars) * 100)
-  );
-
-  // ------------------------
-  // Append new text if close to end
-  const remainingChars = text.length - value.length; 
-  const list = data[difficulty]; 
-
-  if (Array.isArray(list) && list.length > 0 && remainingChars <= 15) {
-    const randomIndex = Math.floor(Math.random() * list.length);
-    const nextText = list[randomIndex].text;
-    setText(prev => prev + " " + nextText); // add a space betwen the old text n the new txt
-  }
-}
-
 
   function handleClick() {
     setTestStarted(true);
