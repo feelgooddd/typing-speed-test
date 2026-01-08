@@ -28,22 +28,6 @@ const TypingTest = ({
 
   const isTypingEnabled = testStarted && !(timeLeft === 0);
 
-  const testRef = useRef(null);
-  const originalHeight = useRef(window.innerHeight);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerHeight < originalHeight.current) {
-        // Keyboard open
-        testRef.current.style.height = originalHeight.current + "px";
-      } else {
-        // Keyboard closed
-        testRef.current.style.height = "";
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
   // Focus input on mount and whenever test starts
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
@@ -142,14 +126,30 @@ const TypingTest = ({
     if (inputRef.current) inputRef.current.focus();
   }
 
-  return (
-    <section
-      className="typing-section"
-      onClick={() => {
-        if (inputRef.current) inputRef.current.focus();
+return (
+  <section
+    className="typing-section"
+    onClick={() => {
+      if (inputRef.current) inputRef.current.focus();
+    }}
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      height: "100%",       // fill parent
+      minHeight: 0          // needed for flex scrolling on mobile
+    }}
+  >
+    {!testStarted && <TypingTestOverlay startTest={handleClick} />}
+
+    {/* Scrollable typing text */}
+    <div
+      className="typing-section__content"
+      style={{
+        flex: 1,             // take up remaining space
+        overflowY: "auto",
+        padding: "1rem"
       }}
     >
-      {!testStarted && <TypingTestOverlay startTest={handleClick} />}
       <p className="typing-text">
         {(typeof text === "string" ? text : "Loading...")
           .split("")
@@ -167,16 +167,22 @@ const TypingTest = ({
             );
           })}
       </p>
+    </div>
 
-      {/* Hidden input always focused */}
-      <TypingInput
-        running={isTypingEnabled}
-        value={input}
-        onType={handleType}
-        ref={inputRef}
-      />
-    </section>
-  );
+    {/* Hidden input always focused */}
+    <TypingInput
+      running={isTypingEnabled}
+      value={input}
+      onType={handleType}
+      ref={inputRef}
+      style={{
+        width: "100%",
+        boxSizing: "border-box"
+      }}
+    />
+  </section>
+);
+
 };
 
 export default TypingTest;
