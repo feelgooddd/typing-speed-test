@@ -28,6 +28,24 @@ const TypingTest = ({
 
   const isTypingEnabled = testStarted && !(timeLeft === 0);
 
+
+    const contentRef = useRef(null);
+
+  // Scroll to active character as user types
+  useEffect(() => {
+    const container = contentRef.current;
+    if (!container) return;
+
+    const activeChar = container.querySelector(".active");
+    if (activeChar) {
+      // Scroll so the active character is visible
+      activeChar.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+    }
+  }, [input]); // runs every time input changes
+
   // Focus input on mount and whenever test starts
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
@@ -126,63 +144,44 @@ const TypingTest = ({
     if (inputRef.current) inputRef.current.focus();
   }
 
-return (
-  <section
-    className="typing-section"
-    onClick={() => {
-      if (inputRef.current) inputRef.current.focus();
-    }}
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      height: "100%",       // fill parent
-      minHeight: 0          // needed for flex scrolling on mobile
-    }}
-  >
-    {!testStarted && <TypingTestOverlay startTest={handleClick} />}
-
-    {/* Scrollable typing text */}
-    <div
-      className="typing-section__content"
-      style={{
-        flex: 1,             // take up remaining space
-        overflowY: "auto",
-        padding: "1rem"
-      }}
+  return (
+    <section
+      className="typing-section"
+      onClick={() => inputRef.current?.focus()}
+      style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}
     >
-      <p className="typing-text">
-        {(typeof text === "string" ? text : "Loading...")
-          .split("")
-          .map((char, index) => {
-            let className = "";
-            if (index < input.length) {
-              className = char === input[index] ? "correct" : "incorrect";
-            }
-            if (index === input.length) className += " active";
+      {!testStarted && <TypingTestOverlay startTest={handleClick} />}
 
-            return (
-              <span key={index} className={className}>
-                {char}
-              </span>
-            );
-          })}
-      </p>
-    </div>
+      <div
+        ref={contentRef}
+        className="typing-section__content"
+        style={{ flex: 1, overflowY: "auto", padding: "1rem" }}
+      >
+        <p className="typing-text">
+          {(typeof text === "string" ? text : "Loading...")
+            .split("")
+            .map((char, index) => {
+              let className = "";
+              if (index < input.length) className = char === input[index] ? "correct" : "incorrect";
+              if (index === input.length) className += " active";
+              return (
+                <span key={index} className={className}>
+                  {char}
+                </span>
+              );
+            })}
+        </p>
+      </div>
 
-    {/* Hidden input always focused */}
-    <TypingInput
-      running={isTypingEnabled}
-      value={input}
-      onType={handleType}
-      ref={inputRef}
-      style={{
-        width: "100%",
-        boxSizing: "border-box"
-      }}
-    />
-  </section>
-);
-
+      <TypingInput
+        running={isTypingEnabled}
+        value={input}
+        onType={handleType}
+        ref={inputRef}
+        style={{ width: "100%", boxSizing: "border-box" }}
+      />
+    </section>
+  );
 };
 
 export default TypingTest;
