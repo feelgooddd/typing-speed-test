@@ -155,7 +155,7 @@ const TypingTest = ({
       <div
         ref={contentRef}
         className="typing-section__content"
-        style={{ flex: 1, overflowY: "auto", padding: "1rem" }}
+        style={{ flex: 1, overflowY: "auto", padding: "1rem", paddingBottom: "3rem" }}
       >
         <p className="typing-text">
           {(typeof text === "string" ? text : "Loading...")
