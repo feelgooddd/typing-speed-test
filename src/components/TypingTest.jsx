@@ -30,22 +30,23 @@ const TypingTest = ({
 
   const contentRef = useRef(null);
 
-  useEffect(() => {
-    const container = contentRef.current;
-    if (!container) return;
+useEffect(() => {
+  const container = contentRef.current;
+  if (!container) return;
 
-    const activeChar = container.querySelector(".active");
-    if (!activeChar) return;
+  const activeChar = container.querySelector(".active");
+  if (!activeChar) return;
 
-    // scroll so active char is a bit above the bottom
-    const offset = 40; //p9xels from bottom
-    const containerBottom = container.scrollTop + container.clientHeight;
-    const charBottom = activeChar.offsetTop + activeChar.offsetHeight;
+  const containerHeight = container.clientHeight;
+  const charOffset = activeChar.offsetTop;
 
-    if (charBottom > containerBottom - offset) {
-      container.scrollTop = charBottom - container.clientHeight + offset;
-    }
-  }, [input]);
+  const offset = 60; 
+  const desiredScroll = charOffset - containerHeight + offset;
+
+  const maxScroll = container.scrollHeight - containerHeight;
+  container.scrollTop = Math.min(Math.max(desiredScroll, 0), maxScroll);
+}, [input]);
+
 
   // Focus input on mount and whenever test starts
   useEffect(() => {
