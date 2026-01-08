@@ -28,6 +28,22 @@ const TypingTest = ({
 
   const isTypingEnabled = testStarted && !(timeLeft === 0);
 
+  const testRef = useRef(null);
+  const originalHeight = useRef(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerHeight < originalHeight.current) {
+        // Keyboard open
+        testRef.current.style.height = originalHeight.current + "px";
+      } else {
+        // Keyboard closed
+        testRef.current.style.height = "";
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   // Focus input on mount and whenever test starts
   useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
