@@ -28,23 +28,24 @@ const TypingTest = ({
 
   const isTypingEnabled = testStarted && !(timeLeft === 0);
 
+  const contentRef = useRef(null);
 
-    const contentRef = useRef(null);
-
-  // Scroll to active character as user types
   useEffect(() => {
     const container = contentRef.current;
     if (!container) return;
 
     const activeChar = container.querySelector(".active");
-    if (activeChar) {
-      // Scroll so the active character is visible
-      activeChar.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest"
-      });
+    if (!activeChar) return;
+
+    // scroll so active char is a bit above the bottom
+    const offset = 40; //p9xels from bottom
+    const containerBottom = container.scrollTop + container.clientHeight;
+    const charBottom = activeChar.offsetTop + activeChar.offsetHeight;
+
+    if (charBottom > containerBottom - offset) {
+      container.scrollTop = charBottom - container.clientHeight + offset;
     }
-  }, [input]); // runs every time input changes
+  }, [input]);
 
   // Focus input on mount and whenever test starts
   useEffect(() => {
@@ -148,21 +149,32 @@ const TypingTest = ({
     <section
       className="typing-section"
       onClick={() => inputRef.current?.focus()}
-      style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        minHeight: 0,
+      }}
     >
       {!testStarted && <TypingTestOverlay startTest={handleClick} />}
 
       <div
         ref={contentRef}
         className="typing-section__content"
-        style={{ flex: 1, overflowY: "auto", padding: "1rem", paddingBottom: "3rem" }}
+        style={{
+          flex: 1,
+          overflowY: "auto",
+          padding: "1rem",
+          paddingBottom: "3rem",
+        }}
       >
         <p className="typing-text">
           {(typeof text === "string" ? text : "Loading...")
             .split("")
             .map((char, index) => {
               let className = "";
-              if (index < input.length) className = char === input[index] ? "correct" : "incorrect";
+              if (index < input.length)
+                className = char === input[index] ? "correct" : "incorrect";
               if (index === input.length) className += " active";
               return (
                 <span key={index} className={className}>
