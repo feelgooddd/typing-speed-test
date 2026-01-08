@@ -9,6 +9,7 @@
 }
 
 .typing-section {
+  position: relative;
   margin: 20px 15px;
   user-select: none; /* Prevents highlighting text */
 }

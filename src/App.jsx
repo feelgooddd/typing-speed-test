@@ -42,18 +42,30 @@ const App = () => {
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   }
+  const handleReset = () => {
+    setTestStarted(false);
+    setTestFinished(false);
+    setTimerStarted(false);
+    setDifficulty("medium");
+    setTimeSetting(60);
+    setTimeLeft(60)
+    setWpm(0);
+    setAccuracy(100);
+    setCorrectChars(0);
+    setTotalChars(0);
+    setCharsMissed(0);
+    setResultVariant("");
+  };
   useEffect(() => {
     if (timeLeft === 0 && PB === 0) {
-      setResultVariant("firstpb")
+      setResultVariant("firstpb");
       setCharsMissed(totalChars - correctChars);
       setTestFinished(!testFinished);
-    }
-    else if (timeLeft === 0 && wpm > PB) {
-      setResultVariant("newpb")
+    } else if (timeLeft === 0 && wpm > PB) {
+      setResultVariant("newpb");
       setCharsMissed(totalChars - correctChars);
       setTestFinished(!testFinished);
-    }
-    else if (timeLeft === 0 && wpm < PB) {
+    } else if (timeLeft === 0 && wpm < PB) {
       setResultVariant("nopb");
       setCharsMissed(totalChars - correctChars);
       setTestFinished(!testFinished);
@@ -105,6 +117,7 @@ const App = () => {
           charsHit={correctChars}
           charsMissed={charsMissed}
           resultVariant={resultVariant}
+          handleReset={handleReset}
         />
       )}
     </div>

@@ -1,8 +1,10 @@
 import "./css/results.css";
 import completedIcon from "../assets/images/icon-completed.svg";
 import newPBIcon from "../assets/images/icon-new-pb.svg";
-const Results = ({ wpm, accuracy, charsHit, charsMissed, resultVariant }) => {
-  console.log(resultVariant);
+const Results = ({ wpm, accuracy, charsHit, charsMissed, resultVariant, handleReset }) => {
+  
+
+
   return (
     <div className="first-results-wrapper">
       {(resultVariant === "nopb" || resultVariant === "firstpb") && (
@@ -57,7 +59,7 @@ const Results = ({ wpm, accuracy, charsHit, charsMissed, resultVariant }) => {
           </div>
         </div>
       </div>
-      <button className="reset-test">Beat This Score</button>
+      <button className="reset-test" onClick={handleReset}>Beat This Score</button>
     </div>
   );
 };
