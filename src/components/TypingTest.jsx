@@ -28,25 +28,6 @@ const TypingTest = ({
 
   const isTypingEnabled = testStarted && !(timeLeft === 0);
 
-  const contentRef = useRef(null);
-
-useEffect(() => {
-  const container = contentRef.current;
-  if (!container) return;
-
-  const activeChar = container.querySelector(".active");
-  if (!activeChar) return;
-
-  const containerHeight = container.clientHeight;
-  const charOffset = activeChar.offsetTop;
-
-  const offset = 60; 
-  const desiredScroll = charOffset - containerHeight + offset;
-
-  const maxScroll = container.scrollHeight - containerHeight;
-  container.scrollTop = Math.min(Math.max(desiredScroll, 0), maxScroll);
-}, [input]);
-
 
   // Focus input on mount and whenever test starts
   useEffect(() => {
@@ -147,49 +128,39 @@ useEffect(() => {
   }
 
   return (
-<section
-  className="typing-section"
-  onClick={() => inputRef.current?.focus()}
-  style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0 }}
->
-  {!testStarted && <TypingTestOverlay startTest={handleClick} />}
+    <section
+      className="typing-section"
+      onClick={() => {
+        if (inputRef.current) inputRef.current.focus();
+      }}
+    >
+      {!testStarted && <TypingTestOverlay startTest={handleClick} />}
+      <p className="typing-text">
+        {(typeof text === "string" ? text : "Loading...")
+          .split("")
+          .map((char, index) => {
+            let className = "";
+            if (index < input.length) {
+              className = char === input[index] ? "correct" : "incorrect";
+            }
+            if (index === input.length) className += " active";
 
-  <section
-    ref={contentRef}
-    className="typing-section__content"
-    style={{
-      flex: 1,
-      overflowY: "auto",
-      padding: "1rem",
-      paddingBottom: "5rem", // lets next line be visible
-    }}
-  >
-    <p className="typing-text">
-      {(typeof text === "string" ? text : "Loading...")
-        .split("")
-        .map((char, index) => {
-          let className = "";
-          if (index < input.length) className = char === input[index] ? "correct" : "incorrect";
-          if (index === input.length) className += " active";
-          return (
-            <span key={index} className={className}>
-              {char}
-            </span>
-          );
-        })}
-    </p>
-  </section>
+            return (
+              <span key={index} className={className}>
+                {char}
+              </span>
+            );
+          })}
+      </p>
 
-  {/* Hidden input always focused */}
-  <TypingInput
-    running={isTypingEnabled}
-    value={input}
-    onType={handleType}
-    ref={inputRef}
-    style={{ width: "100%", boxSizing: "border-box" }}
-  />
-</section>
-
+      {/* Hidden input always focused */}
+      <TypingInput
+        running={isTypingEnabled}
+        value={input}
+        onType={handleType}
+        ref={inputRef}
+      />
+    </section>
   );
 };
 
