@@ -21,23 +21,20 @@ const TypingTest = ({
   const [text, setText] = useState("Test");
   const [data, setData] = useState({});
   const [charsTyped, setCharsTyped] = useState(0);
-  // State boolean to monitor end of text
-  // const [textAppendFlag, setTextAppendFlag] = useState(false);
+  const [scrollOffset, setScrollOffset] = useState(0);
 
   const inputRef = useRef(null);
+  const textTrackRef = useRef(null);
+  const activeCharRef = useRef(null);
 
-  const isTypingEnabled = testStarted && !(timeLeft === 0);
+  const LINE_HEIGHT = 32; // matches line-height: 2rem
 
+  const isTypingEnabled = testStarted && timeLeft !== 0;
 
-  // Focus input on mount and whenever test starts
-  useEffect(() => {
-    if (inputRef.current) inputRef.current.focus();
-  }, [testStarted]);
-
-  // Keep input focused even if they click somewhere else
+  // Keep input focused
   useEffect(() => {
     const keepFocus = () => {
-      if (inputRef.current) inputRef.current.focus();
+      inputRef.current?.focus();
     };
 
     window.addEventListener("click", keepFocus);
@@ -48,6 +45,8 @@ const TypingTest = ({
       window.removeEventListener("keydown", keepFocus);
     };
   }, []);
+
+  // Fetch text data
   useEffect(() => {
     const getTextData = async () => {
       try {
@@ -63,45 +62,57 @@ const TypingTest = ({
 
   useEffect(() => {
     const list = data[difficulty];
-
     if (Array.isArray(list) && list.length > 0) {
       const randomIndex = Math.floor(Math.random() * list.length);
       setText(list[randomIndex].text);
     }
   }, [data, difficulty]);
 
+  // scroll control
+  useEffect(() => {
+    if (!activeCharRef.current || !textTrackRef.current) return;
+
+    const charTop = activeCharRef.current.offsetTop;
+
+    setScrollOffset(prev => {
+      // scroll when caret passes approx 3 lines
+      if (charTop - prev > LINE_HEIGHT * 3) {
+        return prev + LINE_HEIGHT;
+      }
+      return prev;
+    });
+  }, [input.length]);
+
   function handleType(value) {
     if (value.length > text.length) return;
-    if (timeLeft === 0) {
-      return;
-    } // stop typing when time is up
+    if (timeLeft === 0) return;
 
-    // Start time logic
     if (!startTime && value.length === 1) {
       setStartTime(Date.now());
     }
     if (!timerStarted && value.length === 1) {
-      setTimerStarted(true); // start timer now
+      setTimerStarted(true);
     }
+
     if (value.length > input.length) {
-      setCharsTyped((prev) => prev + (value.length - input.length));
+      setCharsTyped(prev => prev + (value.length - input.length));
     }
 
     setInput(value);
 
-    //wpm calc
-    const elapsedMinutes = (Date.now() - (startTime || Date.now())) / 60000;
+    const elapsedMinutes =
+      (Date.now() - (startTime || Date.now())) / 60000;
 
     if (elapsedMinutes > 0) {
-      const currentWpm = Math.round(charsTyped / 5 / elapsedMinutes);
-      setWpm(currentWpm);
+      setWpm(Math.round(charsTyped / 5 / elapsedMinutes));
     }
 
-    // Accuracy calc
     const correctChars = value
       .split("")
       .filter((char, i) => char === text[i]).length;
+
     const totalChars = value.length;
+
     setAccuracy(
       totalChars === 0 ? 100 : Math.round((correctChars / totalChars) * 100)
     );
@@ -109,51 +120,55 @@ const TypingTest = ({
     setCorrectChars(correctChars);
     setTotalChars(totalChars);
 
-    // ------------------------
-    // Append new text if close to end
     const remainingChars = text.length - value.length;
     const list = data[difficulty];
 
-    if (Array.isArray(list) && list.length > 0 && remainingChars <= 15) {
+    if (Array.isArray(list) && list.length > 0 && remainingChars <= 150) {
       const randomIndex = Math.floor(Math.random() * list.length);
-      const nextText = list[randomIndex].text;
-      setText((prev) => prev + " " + nextText); // add a space betwen the old text n the new txt
+      setText(prev => prev + " " + list[randomIndex].text);
     }
   }
 
   function handleClick() {
     setTestStarted(true);
-
-    if (inputRef.current) inputRef.current.focus();
+    inputRef.current?.focus();
   }
 
   return (
     <section
       className="typing-section"
-      onClick={() => {
-        if (inputRef.current) inputRef.current.focus();
-      }}
+      onClick={() => inputRef.current?.focus()}
     >
       {!testStarted && <TypingTestOverlay startTest={handleClick} />}
-      <p className="typing-text">
+
+      <p
+        className="typing-text"
+        ref={textTrackRef}
+        style={{ transform: `translateY(-${scrollOffset}px)` }}
+      >
         {(typeof text === "string" ? text : "Loading...")
           .split("")
           .map((char, index) => {
             let className = "";
+
             if (index < input.length) {
               className = char === input[index] ? "correct" : "incorrect";
             }
+
             if (index === input.length) className += " active";
 
             return (
-              <span key={index} className={className}>
+              <span
+                key={index}
+                className={className}
+                ref={index === input.length ? activeCharRef : null}
+              >
                 {char}
               </span>
             );
           })}
       </p>
 
-      {/* Hidden input always focused */}
       <TypingInput
         running={isTypingEnabled}
         value={input}

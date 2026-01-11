@@ -11,7 +11,16 @@
 .typing-section {
   position: relative;
   margin: 20px 15px;
-  user-select: none; /* Prevents highlighting text */
+  user-select: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-top: 10px;
+
+}
+.typing-text {
+  position: relative;
+  transition: transform 0.15s ease;
+
 }
 
 .correct {
