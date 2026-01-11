@@ -14,4 +14,47 @@
 .header-right {
   display: flex;
   gap: 8px;
+  align-items: center;
+}
+
+/* MOBILE: hide title + description */
+.header-left__content {
+  display: none;
+}
+
+.pb-desktop {
+  display: none;
+}
+
+.pb-mobile {
+  display: inline;
+}
+
+
+@media screen and (min-width: 725px) {
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .header-left__content {
+    display: block;
+  }
+
+  .header-left h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-left p {
+    font-size: 0.75rem;
+  }
+
+  .pb-desktop {
+  display: inline;
+}
+
+.pb-mobile {
+  display: none;
+}
 }

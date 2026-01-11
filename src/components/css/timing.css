@@ -1,26 +1,23 @@
-
 .timing-section {
   background-color: var(--clr-Neutral-900);
 }
 
-.timing-section h3{
-    color: var(--clr-Neutral-400);
-    font-weight: 400;
+.timing-section h3 {
+  color: var(--clr-Neutral-400);
+  font-weight: 400;
 }
 .timing-section__details {
   display: flex;
   justify-content: space-between;
   padding: 10px;
   text-align: center;
-
 }
-.timing-section__details > div{
-      flex: 1;
+.timing-section__details > div {
+  flex: 1;
 }
 
 .timing-section__details > div:not(:last-child) {
   border-right: 2px solid var(--clr-Neutral-800);
-
 }
 
 .timing-section__details-WPM {
@@ -44,21 +41,49 @@
   border-bottom: 1px solid var(--clr-Neutral-500);
 }
 
-.difficulty-btn, .time-btn{
-background-color: transparent;
-border: none;
-color: inherit;
-border: 1px solid var(--clr-Neutral-500);
-border-radius: 8px;
-padding: 5px 10px;
-width: 150px;
+.difficulty-btn,
+.time-btn {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  border: 1px solid var(--clr-Neutral-500);
+  border-radius: 8px;
+  padding: 5px 10px;
+  width: 150px;
 }
 .difficulty-btn {
-    flex: 1;
-
+  flex: 1;
 }
 
 .time-btn {
-    flex: 1;
+  flex: 1;
+}
 
+@media screen and (min-width: 725px) {
+  .timing-section {
+    display: flex;
+    border-bottom: 1px solid var(--clr-Neutral-500);
+    margin-inline: 10px;
+    align-items: center;
+  }
+
+  .timing-section__details {
+    gap: 5px;
+  }
+
+  .timing-section__details-accuracy,
+  .timing-section__details-WPM,
+  .timing-section__details-time {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding-right: 5px;
+  }
+  .timing-section__details > div:not(:last-child) {
+    border-right: 1px solid var(--clr-Neutral-500);
+  }
+
+  .timing-section__buttons {
+    border: none;
+  }
 }

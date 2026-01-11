@@ -58,44 +58,42 @@ const Timing = ({
         </div>
       </div>
 
-<div className="timing-section__buttons">
-  {/* Difficulty Button + Menu */}
-  <div className="timing-menu__wrapper">
-    <button
-      className="difficulty-btn"
-      disabled={testStarted}
-      onClick={() => setIsDifficultyOpen((o) => !o)}
-    >
-      {difficulty[0].toUpperCase() + difficulty.slice(1)}
-    </button>
-    {isDifficultyOpen && (
-      <Menu
-        options={difficultyOptions}
-        onSelect={handleDifficultySelect}
-        onRequestClose={() => setIsDifficultyOpen(false)}
-      />
-    )}
-  </div>
+      <div className="timing-section__buttons">
+        {/* Difficulty Button + Menu */}
+        <div className="timing-menu__wrapper">
+          <button
+            className="difficulty-btn"
+            disabled={testStarted}
+            onClick={() => setIsDifficultyOpen((o) => !o)}
+          >
+            {difficulty[0].toUpperCase() + difficulty.slice(1)}
+          </button>
+          {isDifficultyOpen && (
+            <Menu
+              options={difficultyOptions}
+              onSelect={handleDifficultySelect}
+              onRequestClose={() => setIsDifficultyOpen(false)}
+            />
+          )}
+        </div>
 
-  <div className="timing-menu__wrapper" style={{ marginLeft: "10px" }}>
-    <button
-      className="time-btn"
-      disabled={testStarted}
-      onClick={() => setIsTimeOpen((o) => !o)}
-    >
-      Timed {timeSetting}
-    </button>
-    {isTimeOpen && (
-      <Menu
-        options={timeOptions}
-        onSelect={handleTimeSelect}
-        onRequestClose={() => setIsTimeOpen(false)}
-      />
-    )}
-  </div>
-</div>
-
-
+        <div className="timing-menu__wrapper" style={{ marginLeft: "10px" }}>
+          <button
+            className="time-btn"
+            disabled={testStarted}
+            onClick={() => setIsTimeOpen((o) => !o)}
+          >
+            Timed {timeSetting}
+          </button>
+          {isTimeOpen && (
+            <Menu
+              options={timeOptions}
+              onSelect={handleTimeSelect}
+              onRequestClose={() => setIsTimeOpen(false)}
+            />
+          )}
+        </div>
+      </div>
     </section>
   );
 };
