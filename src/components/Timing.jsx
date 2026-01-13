@@ -46,7 +46,6 @@ const Timing = ({
     if (testStarted) return;
     setDifficulty(level);
   };
-
   return (
     <section className="timing-section">
       {/* Stats */}
