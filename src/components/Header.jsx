@@ -2,7 +2,16 @@ import LogoSmall from "../assets/images/logo-small.svg";
 import PersonalBestIcon from "../assets/images/icon-personal-best.svg";
 import { useState } from "react";
 import "./css/header.css";
-const Header = ({ PB, handleReset, testStarted }) => {
+const Header = ({ setPB, PB, handleReset, testStarted }) => {
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  function handleDeletePB(e){
+    setShowConfirmation(!showConfirmation)
+    if(e === "delete"){
+      localStorage.setItem("PB", 0)
+      setPB(0);
+    }
+  }
   return (
     <header className="header">
       <div className="header-left">
@@ -17,7 +26,17 @@ const Header = ({ PB, handleReset, testStarted }) => {
         </div>
       </div>
       <div className="header-middle">
+        {!showConfirmation ? 
+        <>
         <button className="default-btn reset-btn" onClick={handleReset} disabled={!testStarted}>Reset Test</button>
+        <button className="default-btn delete-score-btn" onClick={handleDeletePB}>Delete Score</button>
+        </>
+        : 
+        <>
+          <button className="default-btn confirm-delete-btn" value="delete" onClick={(e) => handleDeletePB(e.target.value)}>Yes delete</button>
+          <button className="default-btn deny-delete-btn" onClick={handleDeletePB}>No don't delete</button>
+          </>}
+
       </div>
       <div className="header-right">
         <img src={PersonalBestIcon} alt="" />

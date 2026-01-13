@@ -10,6 +10,12 @@
 .header img {
   width: 24px;
 }
+.header-middle{
+  margin-inline: 10px;
+  gap: 4px;
+  display: flex;
+  flex-direction: column;
+}
 
 .header-right {
   display: flex;
@@ -49,7 +55,9 @@
   .header-left p {
     font-size: 0.75rem;
   }
-
+.header-middle{
+  flex-direction: row;
+}
   .pb-desktop {
   display: inline;
 }

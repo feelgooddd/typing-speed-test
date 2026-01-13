@@ -21,6 +21,9 @@ const App = () => {
   const [totalChars, setTotalChars] = useState(0);
   const [charsMissed, setCharsMissed] = useState(0);
   const [resultVariant, setResultVariant] = useState("");
+
+  const [testKey, setTestKey] = useState(0);
+
   useEffect(() => {
     if (!timerStarted) return; // start only on first keypress
 
@@ -48,13 +51,15 @@ const App = () => {
     setTimerStarted(false);
     setDifficulty("medium");
     setTimeSetting(60);
-    setTimeLeft(60)
+    setTimeLeft(60);
     setWpm(0);
     setAccuracy(100);
     setCorrectChars(0);
     setTotalChars(0);
     setCharsMissed(0);
     setResultVariant("");
+
+    setTestKey((prev) => prev + 1); //forces remount
   };
   useEffect(() => {
     if (timeLeft === 0 && PB === 0) {
@@ -80,7 +85,12 @@ const App = () => {
 
   return (
     <div>
-      <Header testStarted={testStarted} PB={PB} handleReset={handleReset} />
+      <Header
+        setPB={setPB}
+        testStarted={testStarted}
+        PB={PB}
+        handleReset={handleReset}
+      />
 
       {!testFinished ? (
         <>
@@ -97,6 +107,8 @@ const App = () => {
             difficulty={difficulty}
           />
           <TypingTest
+            //key to trigger remount
+            key={testKey} // Key is a special property does not need to be destructured or used in the child component
             difficulty={difficulty}
             timeLeft={timeLeft}
             testStarted={testStarted}
