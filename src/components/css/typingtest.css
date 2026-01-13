@@ -15,7 +15,7 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding-top: 10px;
-
+min-height: 150px;
 }
 .typing-text {
   position: relative;
@@ -40,4 +40,9 @@
   line-height: 2rem;
   font-size: 1.25rem;
   color: var(--clr-Neutral-400);
+}
+@media screen and (min-width: 725px){
+  .typing-section{
+    min-height: 400px;
+  }
 }

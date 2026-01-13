@@ -42,16 +42,7 @@
   border-bottom: 1px solid var(--clr-Neutral-500);
 }
 
-.difficulty-btn,
-.time-btn {
-  background-color: transparent;
-  border: none;
-  color: inherit;
-  border: 1px solid var(--clr-Neutral-500);
-  border-radius: 8px;
-  padding: 5px 10px;
-  width: 150px;
-}
+
 .difficulty-btn {
   flex: 1;
 }

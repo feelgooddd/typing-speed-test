@@ -89,7 +89,7 @@ const Timing = ({
           ) : (
             <>
               <button
-                className="difficulty-btn"
+                className="default-btn difficulty-btn"
                 disabled={testStarted}
                 onClick={() => setIsDifficultyOpen((o) => !o)}
               >
@@ -127,7 +127,7 @@ const Timing = ({
           ) : (
             <>
               <button
-                className="time-btn"
+                className="time-btn default-btn"
                 disabled={testStarted}
                 onClick={() => setIsTimeOpen((o) => !o)}
               >

@@ -80,7 +80,7 @@ const App = () => {
 
   return (
     <div>
-      <Header PB={PB} />
+      <Header testStarted={testStarted} PB={PB} handleReset={handleReset} />
 
       {!testFinished ? (
         <>

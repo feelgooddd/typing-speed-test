@@ -1,57 +1,71 @@
-:root{
+:root {
+  /* Neutral */
 
+  --clr-Neutral-900: hsl(0, 0%, 7%);
+  --clr-Neutral-800: hsl(0, 0%, 15%);
+  --clr-Neutral-500: hsl(240, 3%, 46%);
+  --clr-Neutral-400: hsl(240, 1%, 59%);
+  --clr-Neutral-0: hsl(0, 0%, 100%);
 
-/* Neutral */
+  /* ### Blue */
 
---clr-Neutral-900:hsl(0, 0%, 7%);
---clr-Neutral-800: hsl(0, 0%, 15%);
---clr-Neutral-500: hsl(240, 3%, 46%);
---clr-Neutral-400: hsl(240, 1%, 59%);
---clr-Neutral-0: hsl(0, 0%, 100%);
+  --clr-Blue-600: hsl(214, 100%, 55%);
+  --clr-Blue-400: hsl(210, 100%, 65%);
 
-/* ### Blue */
+  /* ### Red */
 
---clr-Blue-600: hsl(214, 100%, 55%);
---clr-Blue-400: hsl(210, 100%, 65%);
+  --clr-Red-500: hsl(354, 63%, 57%);
 
-/* ### Red */
+  /* ### Green */
 
---clr-Red-500: hsl(354, 63%, 57%);
+  --clr-Green-500: hsl(140, 63%, 57%);
 
-/* ### Green */
+  /* ### Yellow */
 
---clr-Green-500: hsl(140, 63%, 57%);
-
-/* ### Yellow */
-
---clr-Yellow-400: hsl(49, 85%, 70%);
-
+  --clr-Yellow-400: hsl(49, 85%, 70%);
 }
 
-*,*::before,*::after{
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-img{
+img {
   width: 100%;
   display: block;
 }
 
-button{
+button {
   font-family: inherit;
   color: inherit;
 }
 
-.txt-grey{
-  color: var(--clr-Neutral-500)
+.txt-grey {
+  color: var(--clr-Neutral-500);
 }
-.hidden{
+.hidden {
   display: none;
 }
 
-body{
+body {
   color: var(--clr-Neutral-0);
   background-color: var(--clr-Neutral-900);
   font-family: "Sora", sans-serif;
+}
+
+.default-btn {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  border: 1px solid var(--clr-Neutral-500);
+  border-radius: 8px;
+  padding: 5px 10px;
+  width: 150px;
+}
+
+.default-btn:disabled {
+  background-color: #2c2929;
+  color: rgb(223, 212, 223);
 }
