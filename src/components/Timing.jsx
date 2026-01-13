@@ -1,5 +1,5 @@
 import "./css/timing.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Menu from "./Menu";
 
 const Timing = ({
@@ -25,22 +25,31 @@ const Timing = ({
     { label: "Medium", value: "medium" },
     { label: "Hard", value: "hard" },
   ];
+
   const [isTimeOpen, setIsTimeOpen] = useState(false);
   const [isDifficultyOpen, setIsDifficultyOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 725);
 
-  function handleTimeSelect(seconds) {
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 725);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleTimeSelect = (seconds) => {
     if (testStarted) return;
     setTimeSetting(seconds);
     setTimeLeft(seconds);
-  }
+  };
 
-  function handleDifficultySelect(level) {
+  const handleDifficultySelect = (level) => {
     if (testStarted) return;
     setDifficulty(level);
-  }
+  };
 
   return (
     <section className="timing-section">
+      {/* Stats */}
       <div className="timing-section__details">
         <div className="timing-section__details-WPM">
           <h3>WPM</h3>
@@ -58,39 +67,81 @@ const Timing = ({
         </div>
       </div>
 
+      {/* Buttons */}
       <div className="timing-section__buttons">
-        {/* Difficulty Button + Menu */}
+        {/* Difficulty Selector */}
         <div className="timing-menu__wrapper">
-          <button
-            className="difficulty-btn"
-            disabled={testStarted}
-            onClick={() => setIsDifficultyOpen((o) => !o)}
-          >
-            {difficulty[0].toUpperCase() + difficulty.slice(1)}
-          </button>
-          {isDifficultyOpen && (
-            <Menu
-              options={difficultyOptions}
-              onSelect={handleDifficultySelect}
-              onRequestClose={() => setIsDifficultyOpen(false)}
-            />
+          {isDesktop ? (
+            <div className="desktop-options-wrapper">
+              <span className="desktop-label">Difficulty:</span>
+              <div className="desktop-options">
+                {difficultyOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    disabled={testStarted}
+                    className={difficulty === opt.value ? "active" : ""}
+                    onClick={() => handleDifficultySelect(opt.value)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              <button
+                className="difficulty-btn"
+                disabled={testStarted}
+                onClick={() => setIsDifficultyOpen((o) => !o)}
+              >
+                {difficulty[0].toUpperCase() + difficulty.slice(1)}
+              </button>
+              {isDifficultyOpen && (
+                <Menu
+                  options={difficultyOptions}
+                  onSelect={handleDifficultySelect}
+                  onRequestClose={() => setIsDifficultyOpen(false)}
+                />
+              )}
+            </>
           )}
         </div>
 
-        <div className="timing-menu__wrapper" style={{ marginLeft: "10px" }}>
-          <button
-            className="time-btn"
-            disabled={testStarted}
-            onClick={() => setIsTimeOpen((o) => !o)}
-          >
-            Timed {timeSetting}
-          </button>
-          {isTimeOpen && (
-            <Menu
-              options={timeOptions}
-              onSelect={handleTimeSelect}
-              onRequestClose={() => setIsTimeOpen(false)}
-            />
+        {/* Time Selector */}
+        <div className="timing-menu__wrapper">
+          {isDesktop ? (
+            <div className="desktop-options-wrapper">
+              <span className="desktop-label">Time:</span>
+              <div className="desktop-options">
+                {timeOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    disabled={testStarted}
+                    className={timeSetting === opt.label ? "active" : ""}
+                    onClick={() => handleTimeSelect(opt.value)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              <button
+                className="time-btn"
+                disabled={testStarted}
+                onClick={() => setIsTimeOpen((o) => !o)}
+              >
+                Timed {timeSetting}
+              </button>
+              {isTimeOpen && (
+                <Menu
+                  options={timeOptions}
+                  onSelect={handleTimeSelect}
+                  onRequestClose={() => setIsTimeOpen(false)}
+                />
+              )}
+            </>
           )}
         </div>
       </div>

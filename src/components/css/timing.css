@@ -14,6 +14,7 @@
 }
 .timing-section__details > div {
   flex: 1;
+  padding-inline: 20px;
 }
 
 .timing-section__details > div:not(:last-child) {
@@ -79,6 +80,15 @@
     gap: 5px;
     padding-right: 5px;
   }
+
+  .timing-section__details-WPM p,
+  .timing-section__details-accuracy p,
+  .timing-section__details-time p {
+    width: 50px; /* enough to fit the largest value */
+    text-align: center;
+    display: inline-block; /* prevent shrinking */
+  }
+
   .timing-section__details > div:not(:last-child) {
     border-right: 1px solid var(--clr-Neutral-500);
   }
@@ -86,4 +96,57 @@
   .timing-section__buttons {
     border: none;
   }
+}
+
+.desktop-options {
+  display: flex;
+  gap: 10px;
+}
+
+.desktop-options button {
+  flex: 1;
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--clr-Neutral-500);
+  background-color: transparent;
+  color: var(--clr-Neutral-50);
+  cursor: pointer;
+}
+
+.desktop-options button.active {
+  background-color: var(--clr-Neutral-700);
+  border-color: var(--clr-Neutral-50);
+}
+.desktop-options button.active {
+  background-color: #555 !important; /* dark gray background */
+  border-color: #fff !important; /* white border */
+  color: #fff !important; /* white text */
+}
+
+.desktop-options-wrapper {
+  display: flex;
+  flex-direction: column; /* label on top, buttons below */
+  gap: 5px;
+}
+
+.desktop-label {
+  font-weight: 500;
+  color: var(--clr-Neutral-50);
+}
+
+.desktop-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* allow buttons to wrap on smaller widths */
+}
+
+.desktop-options button {
+  flex: 0 0 calc((100% - (10px * 3)) / 4); /* equal width for 4 buttons, adjust gap count */
+  min-width: 80px; /* prevent buttons from getting too small */
+}
+
+.desktop-options button.active {
+  background-color: #555 !important;
+  border-color: #fff !important;
+  color: #fff !important;
 }
