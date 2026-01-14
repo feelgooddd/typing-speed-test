@@ -15,6 +15,8 @@ const TypingTest = ({
   difficulty,
   setTotalChars,
   setCorrectChars,
+  mode,
+  setTestFinished
 }) => {
   const [input, setInput] = useState("");
   const [startTime, setStartTime] = useState(null);
@@ -29,7 +31,7 @@ const TypingTest = ({
 
   const LINE_HEIGHT = 32; // matches line-height: 2rem
 
-  const isTypingEnabled = testStarted && timeLeft !== 0;
+  const isTypingEnabled = testStarted && (timeLeft > 0 || mode === "untimed");
 
   // Keep input focused
   useEffect(() => {
@@ -74,7 +76,7 @@ const TypingTest = ({
 
     const charTop = activeCharRef.current.offsetTop;
 
-    setScrollOffset(prev => {
+    setScrollOffset((prev) => {
       // scroll when caret passes approx 3 lines
       if (charTop - prev > LINE_HEIGHT * 3) {
         return prev + LINE_HEIGHT;
@@ -83,51 +85,54 @@ const TypingTest = ({
     });
   }, [input.length]);
 
-  function handleType(value) {
-    if (value.length > text.length) return;
-    if (timeLeft === 0) return;
+function handleType(value) {
+  // Prevent typing past text length
+  if (value.length > text.length) return;
 
-    if (!startTime && value.length === 1) {
-      setStartTime(Date.now());
-    }
-    if (!timerStarted && value.length === 1) {
-      setTimerStarted(true);
-    }
+  // Block typing only if timed and timeLeft is 0
+  if (timeLeft === 0 && mode !== "untimed") return;
 
-    if (value.length > input.length) {
-      setCharsTyped(prev => prev + (value.length - input.length));
-    }
+  // Start time and timer on first character typed
+  if (!startTime && value.length === 1) setStartTime(Date.now());
+  if (!timerStarted && value.length === 1) setTimerStarted(true);
 
-    setInput(value);
+  // Count new characters typed
+  if (value.length > input.length) setCharsTyped(prev => prev + (value.length - input.length));
 
-    const elapsedMinutes =
-      (Date.now() - (startTime || Date.now())) / 60000;
+  // Update input state
+  setInput(value);
 
-    if (elapsedMinutes > 0) {
-      setWpm(Math.round(charsTyped / 5 / elapsedMinutes));
-    }
+  // Calculate WPM
+  const elapsedMinutes = (Date.now() - (startTime || Date.now())) / 60000;
+  if (elapsedMinutes > 0) setWpm(Math.round(charsTyped / 5 / elapsedMinutes));
 
-    const correctChars = value
-      .split("")
-      .filter((char, i) => char === text[i]).length;
+  // Calculate correct chars and accuracy
+  const correctChars = value
+    .split("")
+    .filter((char, i) => char === text[i]).length;
+  const totalChars = value.length;
 
-    const totalChars = value.length;
+  setAccuracy(totalChars === 0 ? 100 : Math.round((correctChars / totalChars) * 100));
+  setCorrectChars(correctChars);
+  setTotalChars(totalChars);
 
-    setAccuracy(
-      totalChars === 0 ? 100 : Math.round((correctChars / totalChars) * 100)
-    );
-
-    setCorrectChars(correctChars);
-    setTotalChars(totalChars);
-
+  // Only extend text if in timed mode
+  if (mode !== "untimed") {
     const remainingChars = text.length - value.length;
     const list = data[difficulty];
-
     if (Array.isArray(list) && list.length > 0 && remainingChars <= 150) {
       const randomIndex = Math.floor(Math.random() * list.length);
       setText(prev => prev + " " + list[randomIndex].text);
     }
   }
+
+  // Finish test if untimed and user typed all available text
+  if (mode === "untimed" && value.length === text.length) {
+    setTestFinished(true);
+  }
+}
+
+
 
   function handleClick() {
     setTestStarted(true);

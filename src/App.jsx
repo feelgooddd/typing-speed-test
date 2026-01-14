@@ -9,6 +9,7 @@ const App = () => {
   const [timerStarted, setTimerStarted] = useState(false);
   const [testFinished, setTestFinished] = useState(false);
 
+  const [mode, setMode] = useState("timed");
   const [timeSetting, setTimeSetting] = useState(60);
   const [difficulty, setDifficulty] = useState("medium");
 
@@ -25,20 +26,26 @@ const App = () => {
   const [testKey, setTestKey] = useState(0);
 
   useEffect(() => {
-    if (!timerStarted) return; // start only on first keypress
+    if (!timerStarted) return;
 
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          return 0;
+        if (mode === "timed") {
+          // Countdown for timed mode
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        } else {
+          // Count up for untimed mode
+          return prev + 1;
         }
-        return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [timerStarted]);
+  }, [timerStarted, mode]);
 
   function formatTime(seconds) {
     const mins = Math.floor(seconds / 60);
@@ -51,37 +58,38 @@ const App = () => {
     setTimerStarted(false);
     setDifficulty("medium");
     setTimeSetting(60);
-    setTimeLeft(60);
+    setTimeLeft(mode === "untimed" ? 0 : 60);
     setWpm(0);
     setAccuracy(100);
     setCorrectChars(0);
     setTotalChars(0);
     setCharsMissed(0);
     setResultVariant("");
-
     setTestKey((prev) => prev + 1); //forces remount
   };
+
   useEffect(() => {
+    if (mode === "untimed") return; // <-- skip finishing for untimed
+
     if (timeLeft === 0 && PB === 0) {
       setResultVariant("firstpb");
       setCharsMissed(totalChars - correctChars);
-      setTestFinished(!testFinished);
+      setTestFinished(true);
     } else if (timeLeft === 0 && wpm > PB) {
       setResultVariant("newpb");
       setCharsMissed(totalChars - correctChars);
-      setTestFinished(!testFinished);
+      setTestFinished(true);
     } else if (timeLeft === 0 && wpm < PB) {
       setResultVariant("nopb");
       setCharsMissed(totalChars - correctChars);
-      setTestFinished(!testFinished);
+      setTestFinished(true);
     }
+
     if (timeLeft === 0 && wpm > PB) {
-      //Update visually without needing a reload
       setPB(wpm);
-      //Store it in local storage
       localStorage.setItem("PB", wpm);
     }
-  }, [timeLeft]);
+  }, [timeLeft, PB, wpm, totalChars, correctChars, mode]);
 
   return (
     <div>
@@ -105,6 +113,8 @@ const App = () => {
             setTimeSetting={setTimeSetting}
             setDifficulty={setDifficulty}
             difficulty={difficulty}
+            mode={mode}
+            setMode={setMode}
           />
           <TypingTest
             //key to trigger remount
@@ -120,6 +130,8 @@ const App = () => {
             setPB={setPB}
             setCorrectChars={setCorrectChars}
             setTotalChars={setTotalChars}
+            mode={mode}
+            setTestFinished={setTestFinished}
           />
         </>
       ) : (

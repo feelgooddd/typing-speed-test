@@ -12,12 +12,17 @@ const Timing = ({
   setTimeSetting,
   setDifficulty,
   testStarted,
+  mode,
+  setMode, // <-- make sure you pass setMode from App.jsx
 }) => {
+  // Time and difficulty options
+  console.log(timeSetting)
   const timeOptions = [
     { label: "0:01", value: 1 },
     { label: "0:30", value: 30 },
     { label: "1:00", value: 60 },
     { label: "1:30", value: 90 },
+    { label: "Untimed(Unranked)", value: 0 },
   ];
 
   const difficultyOptions = [
@@ -26,26 +31,48 @@ const Timing = ({
     { label: "Hard", value: "hard" },
   ];
 
+  // Local state
   const [isTimeOpen, setIsTimeOpen] = useState(false);
   const [isDifficultyOpen, setIsDifficultyOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 725);
 
+  // Handle window resize for responsive layout
   useEffect(() => {
     const handleResize = () => setIsDesktop(window.innerWidth >= 725);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleTimeSelect = (seconds) => {
-    if (testStarted) return;
-    setTimeSetting(seconds);
-    setTimeLeft(seconds);
+  // Format seconds to mm:ss
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
+  // Handle selecting a time option
+  const handleTimeSelect = (value) => {
+    if (testStarted) return;
+
+    if (value === 0) {
+      // Untimed
+      setMode("untimed");
+      setTimeSetting("0:00");
+      setTimeLeft(0);
+    } else {
+      // Timed
+      setMode("timed");
+      setTimeSetting(value);
+      setTimeLeft(value);
+    }
+  };
+
+  // Handle selecting difficulty
   const handleDifficultySelect = (level) => {
     if (testStarted) return;
     setDifficulty(level);
   };
+
   return (
     <section className="timing-section">
       {/* Stats */}
@@ -116,7 +143,12 @@ const Timing = ({
                   <button
                     key={opt.value}
                     disabled={testStarted}
-                    className={timeSetting === opt.label ? "active" : ""}
+                    className={
+                      timeSetting === opt.label ||
+                      (opt.value === 0 && mode === "untimed")
+                        ? "active"
+                        : ""
+                    }
                     onClick={() => handleTimeSelect(opt.value)}
                   >
                     {opt.label}
@@ -131,7 +163,7 @@ const Timing = ({
                 disabled={testStarted}
                 onClick={() => setIsTimeOpen((o) => !o)}
               >
-                Timed {timeSetting}
+                {mode === "timed" ? `Timed ${timeSetting}` : "No Time (Unranked)"}
               </button>
               {isTimeOpen && (
                 <Menu

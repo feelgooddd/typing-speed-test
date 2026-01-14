@@ -63,6 +63,7 @@ body {
   border-radius: 8px;
   padding: 5px 10px;
   width: 150px;
+  font-size: 0.785rem;
 }
 
 .default-btn:disabled {
