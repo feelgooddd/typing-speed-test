@@ -131,10 +131,7 @@
   flex-wrap: wrap; /* allow buttons to wrap on smaller widths */
 }
 
-.desktop-options button {
-  flex: 0 0 calc((100% - (10px * 3)) / 4); /* equal width for 4 buttons, adjust gap count */
-  min-width: 80px; /* prevent buttons from getting too small */
-}
+
 
 .desktop-options button.active {
   background-color: #555 !important;
