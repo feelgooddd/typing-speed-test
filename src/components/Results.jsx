@@ -1,10 +1,7 @@
 import "./css/results.css";
 import completedIcon from "../assets/images/icon-completed.svg";
 import newPBIcon from "../assets/images/icon-new-pb.svg";
-const Results = ({ wpm, accuracy, charsHit, charsMissed, resultVariant, handleReset }) => {
-  
-
-
+const Results = ({wpm, accuracy, charsHit, charsMissed, resultVariant, handleReset }) => {
   return (
     <div className="first-results-wrapper">
       {(resultVariant === "nopb" || resultVariant === "firstpb") && (

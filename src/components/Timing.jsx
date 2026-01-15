@@ -16,13 +16,12 @@ const Timing = ({
   setMode, // <-- make sure you pass setMode from App.jsx
 }) => {
   // Time and difficulty options
-  console.log(timeSetting)
   const timeOptions = [
     { label: "0:01", value: 1 },
     { label: "0:30", value: 30 },
     { label: "1:00", value: 60 },
     { label: "1:30", value: 90 },
-    { label: "Untimed(Unranked)", value: 0 },
+    { label: "Untimed", value: 0 },
   ];
 
   const difficultyOptions = [
@@ -57,12 +56,12 @@ const Timing = ({
     if (value === 0) {
       // Untimed
       setMode("untimed");
-      setTimeSetting("0:00");
+      setTimeSetting(0); // keep as number 0
       setTimeLeft(0);
     } else {
       // Timed
       setMode("timed");
-      setTimeSetting(value);
+      setTimeSetting(value); // keep as number
       setTimeLeft(value);
     }
   };
@@ -144,8 +143,8 @@ const Timing = ({
                     key={opt.value}
                     disabled={testStarted}
                     className={
-                      timeSetting === opt.label ||
-                      (opt.value === 0 && mode === "untimed")
+                      (opt.value === 0 && mode === "untimed") ||
+                      (opt.value !== 0 && timeSetting === opt.value)
                         ? "active"
                         : ""
                     }
@@ -163,7 +162,9 @@ const Timing = ({
                 disabled={testStarted}
                 onClick={() => setIsTimeOpen((o) => !o)}
               >
-                {mode === "timed" ? `Timed ${timeSetting}` : "No Time (Unranked)"}
+                {mode === "timed"
+                  ? `Timed ${timeSetting}`
+                  : "Untimed"}
               </button>
               {isTimeOpen && (
                 <Menu

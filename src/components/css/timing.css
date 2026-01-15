@@ -42,7 +42,6 @@
   border-bottom: 1px solid var(--clr-Neutral-500);
 }
 
-
 .difficulty-btn {
   flex: 1;
 }
@@ -55,12 +54,7 @@
   .timing-section {
     display: flex;
     border-bottom: 1px solid var(--clr-Neutral-500);
-    margin-inline: 10px;
     align-items: center;
-  }
-
-  .timing-section__details {
-    gap: 5px;
   }
 
   .timing-section__details-accuracy,
@@ -75,13 +69,15 @@
   .timing-section__details-WPM p,
   .timing-section__details-accuracy p,
   .timing-section__details-time p {
-    width: 50px; /* enough to fit the largest value */
+    width: 40px;
     text-align: center;
-    display: inline-block; /* prevent shrinking */
   }
 
   .timing-section__details > div:not(:last-child) {
     border-right: 1px solid var(--clr-Neutral-500);
+  }
+  .timing-section__details {
+    font-size: 0.825rem;
   }
 
   .timing-section__buttons {
@@ -130,8 +126,6 @@
   gap: 10px;
   flex-wrap: wrap; /* allow buttons to wrap on smaller widths */
 }
-
-
 
 .desktop-options button.active {
   background-color: #555 !important;
