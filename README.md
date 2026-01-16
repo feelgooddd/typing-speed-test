@@ -1,16 +1,106 @@
-# React + Vite
+# ⌨️ Typing Test App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🌐 **Live Demo:** [https://a-typing-test.netlify.app/](https://a-typing-test.netlify.app/)
 
-Currently, two official plugins are available:
+A modern, responsive typing test built with **React + Vite**. This app supports both **timed** and **untimed** modes, tracks **WPM**, **accuracy**, and **personal bests**, and focuses on clean UX with clear test flow.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project was built as part of a **Frontend Mentor hackathon**, with a focus on deepening understanding of **React state management**, **effects**, and **component-driven UI design** while delivering a polished, real-world frontend experience.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Features
 
-## Expanding the ESLint configuration
+* ⏱️ **Timed mode** (countdown)
+* ♾️ **Untimed mode** (count-up)
+* 📊 Real-time **WPM** and **accuracy** tracking
+* 🏆 **Personal Best (PB)** tracking with `localStorage`
+* 🔁 Clean test reset & replay flow
+* 🧠 Multiple difficulty levels
+* 📱 Responsive layout
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🛠️ Tech Stack
+
+* **React** (hooks-based)
+* **Vite** (fast dev + build)
+* **JavaScript (ES6+)**
+* **CSS** (custom styling)
+* **LocalStorage** (persistent PB)
+* **Fetch API** (loading test data from `data.json`)
+
+---
+
+## 🧩 Project Structure
+
+The app is component-driven, with clear separation of concerns:
+
+* `App` — Global state owner and test flow controller
+* `Header` — App branding and PB display
+* `Timing` — Timer display and mode/difficulty controls
+* `TypingTest` — Core typing logic and input handling
+* `Results` — End-of-test summary and replay controls
+
+Typing content is loaded via a `fetch` call inside a `useEffect`, pulling word data from a local `data.json` file at runtime.
+
+State is intentionally lifted where needed to ensure consistent test behavior across modes.
+
+---
+
+## 🔄 Test Flow Overview
+
+1. User selects **mode** and **difficulty**
+2. Test starts on first input
+3. Timer begins (countdown or count-up depending on mode)
+4. Typing stats update in real time
+5. Test finishes when:
+
+   * Timed mode reaches `0:00`, or
+   * Untimed mode is manually completed
+6. Results are calculated **once per test**
+7. PB is updated if applicable
+
+Special care is taken to prevent duplicate finish logic using guarded effects.
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# install dependencies
+npm install
+
+# start dev server
+npm run dev
+```
+
+Then open the local Vite URL in your browser.
+
+---
+
+## 🎯 Goals of This Project
+
+* Practice **real-world React state coordination**
+* Learn to manage **timers and side effects** safely
+* Avoid common pitfalls with `useEffect` dependency loops
+* Build a complete, polished mini-application from scratch
+
+---
+
+## 📈 Possible Future Improvements
+
+* User accounts & cloud-synced PBs
+* Per-difficulty leaderboards
+* Custom text input
+* Improved analytics (consistency, streaks)
+* Animations and micro-interactions
+
+---
+
+## 🧑‍💻 Author
+
+Built by **Ryan Goods** as a focused React learning project.
+
+---
+
+Thanks for checking it out! Feedback and suggestions are always welcome.
