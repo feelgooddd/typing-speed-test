@@ -66,4 +66,13 @@
   outline: none;
   font-weight: 600;
   text-align: center;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.reset-test img{
+  filter: invert(1);
+  width: 20px;
 }

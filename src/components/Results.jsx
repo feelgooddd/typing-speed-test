@@ -56,7 +56,7 @@ const Results = ({wpm, accuracy, charsHit, charsMissed, resultVariant, handleRes
           </div>
         </div>
       </div>
-      <button className="reset-test" onClick={handleReset}>Beat This Score</button>
+      <button className="reset-test" onClick={handleReset}>Beat This Score<img src="./images/icon-restart.svg"/></button>
     </div>
   );
 };

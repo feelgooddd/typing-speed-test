@@ -101,13 +101,8 @@
 }
 
 .desktop-options button.active {
-  background-color: var(--clr-Neutral-700);
-  border-color: var(--clr-Neutral-50);
-}
-.desktop-options button.active {
-  background-color: #555 !important; /* dark gray background */
-  border-color: #fff !important; /* white border */
-  color: #fff !important; /* white text */
+  border-color: var(--clr-Blue-400);
+  color: var(--clr-Blue-400); /* white text */
 }
 
 .desktop-options-wrapper {
@@ -125,10 +120,4 @@
   display: flex;
   gap: 10px;
   flex-wrap: wrap; /* allow buttons to wrap on smaller widths */
-}
-
-.desktop-options button.active {
-  background-color: #555 !important;
-  border-color: #fff !important;
-  color: #fff !important;
 }
